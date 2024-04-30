@@ -1,0 +1,7 @@
+    Posibles mejoras a firstAttempt:
+        - Validación de entrada: Agregar alguna validación para verificar si la entrada es un número válido antes de realizar operaciones.
+        - Manejo de errores: Añadir manejo de errores para casos como división por cero o entradas no válidas.
+        - Separación de lógica: Considerar separar la lógica de cálculo y la lógica de presentación en diferentes funciones o hooks personalizados.
+
+    Otras maneras de hacerlo??
+        
