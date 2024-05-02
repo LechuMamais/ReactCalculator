@@ -1,52 +1,19 @@
 import "./Calculator.css";
+import { useReducer } from "react";
 import React from "react";
-import { useState } from "react";
 import { useRef } from "react";
+import { initialState, reducer } from "../../customHooks/calculatorReducer";
+import { calculatorActions } from "../../customHooks/calculatorActions";
 
 const Calculator = () => {
-  const [firstNumber, setFirstNumber] = useState(null);
-  const [operator, setOperator] = useState(null);
-  const [result, setResult] = useState(null);
-  const [oldResults, setOldResults] = useState([]);
-
+  const [state, dispatch] = useReducer(reducer, initialState);
   const inputRef = useRef(null);
-  const handleClick = (newOperator) => {
+
+  const handleClick = (operator) => {
     const value = parseInt(inputRef.current.value);
     inputRef.current.value = null;
     inputRef.current.focus();
-    if (newOperator === "=") {
-      let newResult = 0;
-      switch (operator) {
-        case "+":
-          newResult = firstNumber + value;
-          break;
-        case "-":
-          newResult = firstNumber - value;
-          break;
-        case "*":
-          newResult = firstNumber * value;
-          break;
-        case "/":
-          newResult = firstNumber / value;
-          break;
-        case "%":
-          newResult = firstNumber % value;
-          break;
-        default:
-          newResult = value;
-      }
-      if (result!==null) {
-        let newOldResultsArray = oldResults.concat(result)
-        console.log(newOldResultsArray)
-        newOldResultsArray.sort((a,b)=> {return b-a})
-        setOldResults(newOldResultsArray)
-      }
-      setResult(newResult);
-      console.log(newResult);
-    }
-
-    setFirstNumber(value);
-    setOperator(newOperator);
+    calculatorActions(dispatch, state, operator, value);
   };
 
   return (
@@ -60,13 +27,12 @@ const Calculator = () => {
         <button onClick={() => handleClick("%")}>%</button>
         <button onClick={() => handleClick("=")}>=</button>
       </div>
-      <h4>{result != null ? result : ""}</h4>
+      <h4>{state.result != null ? state.result : ""}</h4>
       <ul>
-        {oldResults.length >= 1
-          ? oldResults
-              .toReversed()
-              .map((result) => <li key={result.toString()}>{result}</li>)
-          : ""}
+        {state.oldResults.length >= 1 &&
+          state.oldResults.map((result) => (
+            <li key={result.toString()}>{result}</li>
+          ))}
       </ul>
     </div>
   );
